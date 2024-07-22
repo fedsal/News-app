@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:news_app/features/home/data/models/article.dart';
 import 'package:news_app/features/home/data/models/article_response.dart';
 import 'package:retrofit/retrofit.dart';
 import '../../../../../core/constants/constants.dart';

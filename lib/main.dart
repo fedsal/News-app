@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/features/home/data/data_sources/remote/headlines_api_service.dart';
 import 'package:news_app/features/home/data/repository/headline_repository_impl.dart';
-import 'package:news_app/features/home/domain/repositories/headline_repository.dart';
 import 'package:news_app/features/home/domain/usecases/get_country_headlines.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/pages/headlines.dart';
