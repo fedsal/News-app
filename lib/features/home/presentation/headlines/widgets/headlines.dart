@@ -9,9 +9,7 @@ class Headlines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-    );
+    return _buildBody();
   }
 
   _buildBody() {

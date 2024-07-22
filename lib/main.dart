@@ -5,7 +5,7 @@ import 'package:news_app/features/home/data/data_sources/remote/headlines_api_se
 import 'package:news_app/features/home/data/repository/headline_repository_impl.dart';
 import 'package:news_app/features/home/domain/usecases/get_country_headlines.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
-import 'package:news_app/features/home/presentation/pages/headlines.dart';
+import 'package:news_app/features/home/presentation/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         create: (BuildContext context) => HeadlinesBloc(
             GetCountryHeadlinesUseCase(
                 HeadLineRepositoryImpl(HeadlinesApiService(Dio())))),
-        child: const Headlines(),
+        child: const HomePage(),
       ),
     );
   }

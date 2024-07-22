@@ -63,6 +63,7 @@ dependencies:
   #chached image 
   cached_network_image: ^3.2.0
   dio: ^5.5.0+1
+  iconsax: ^0.0.8
 
 dev_dependencies:
   flutter_test:
