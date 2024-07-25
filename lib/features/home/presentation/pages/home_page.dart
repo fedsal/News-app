@@ -39,9 +39,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: _pages.elementAt(_selectedIndex),
-      ),
+      body: _pages.elementAt(_selectedIndex),
     );
   }
 }
