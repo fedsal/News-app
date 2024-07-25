@@ -23,12 +23,12 @@ class _HeadlinesApiService implements HeadlinesApiService {
   @override
   Future<HttpResponse<ArticleResponse>> getHeadlines({
     String? apiKey,
-    String? country,
+    String? sources,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'apiKey': apiKey,
-      r'country': country,
+      r'sources': sources,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

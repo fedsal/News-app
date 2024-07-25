@@ -10,10 +10,10 @@ class HeadLineRepositoryImpl implements HeadlineRepository {
   const HeadLineRepositoryImpl(this._headlinesApiService);
 
   @override
-  Future<DataState<List<ArticleEntity>>> getHeadLines(String country) async {
+  Future<DataState<List<ArticleEntity>>> getHeadLines(String sources) async {
     try {
       final httpResponse = await _headlinesApiService.getHeadlines(
-          apiKey: "bf4d1f8d1556497892f3b75deb89fef1", country: country);
+          apiKey: "bf4d1f8d1556497892f3b75deb89fef1", sources: sources);
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         return DataSuccess(httpResponse.data.articles!);

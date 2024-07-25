@@ -1,32 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app/core/resources/colors.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
+import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
 
 class Headlines extends StatelessWidget {
   const Headlines({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         _buildWelcome(),
         _buildSearchBar(),
         _buildHeadlinesSection(),
       ],
-    );
+    ));
   }
-
-  Widget _buildHeadlinesSection() => Container(
-        margin: const EdgeInsets.only(top: 30),
-        height: 305,
-        color: Colors.red,
-        child: null,
-      );
 
   Widget _buildSearchBar() => Container(
       margin: const EdgeInsets.only(top: 40.0, left: 20, right: 20),
@@ -75,9 +69,10 @@ class Headlines extends StatelessWidget {
                 child: SvgPicture.asset(
                   'assets/images/search_icon.svg',
                   semanticsLabel: 'Search Icon',
-                  width: 24, // Example size
-                  height: 24, // Example size
-                  color: Colors.white, // Adjust icon color if needed
+                  width: 24,
+                  height: 24,
+                  colorFilter:
+                      const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
               ),
             ),
@@ -118,26 +113,36 @@ class Headlines extends StatelessWidget {
         ],
       ));
 
-  _buildBody() {
+  Widget _buildHeadlinesSection() {
     return BlocBuilder<HeadlinesBloc, HeadlinesState>(
       builder: (BuildContext context, HeadlinesState state) {
-        switch (state.runtimeType) {
-          case HeadlinesLoading:
-            return const Center(
-              child: CupertinoActivityIndicator(),
-            );
-          case HeadlinesError:
-            return const Center(child: Icon(Icons.refresh));
-          case HeadlinesSuccess:
-            return ListView.builder(
-                itemCount: state.articles!.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text("$index"),
-                  );
-                });
-          default:
-            return const SizedBox();
+        if (state is HeadlinesLoading) {
+          return const Center(
+            child: CupertinoActivityIndicator(),
+          );
+        } else if (state is HeadlinesError) {
+          return const Center(child: Icon(Icons.refresh));
+        } else if (state is HeadlinesSuccess) {
+          return Container(
+              margin: const EdgeInsets.all(20),
+              height: 312,
+              child: ListView.separated(
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) => const SizedBox(
+                        width: 20,
+                      ),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.articles!.length,
+                  itemBuilder: (context, index) {
+                    return Article(
+                      title: state.articles![index].title,
+                      imageSrc: state.articles![index].urlToImage,
+                      author: state.articles![index].author,
+                      publishedDate: state.articles![index].publishedAt,
+                    );
+                  }));
+        } else {
+          return const SizedBox();
         }
       },
     );

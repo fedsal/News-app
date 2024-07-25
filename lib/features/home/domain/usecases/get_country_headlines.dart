@@ -10,6 +10,6 @@ class GetCountryHeadlinesUseCase
   GetCountryHeadlinesUseCase(this._headlineRepository);
 
   @override
-  Future<DataState<List<ArticleEntity>>> call({String params = 'ar'}) =>
+  Future<DataState<List<ArticleEntity>>> call({String params = 'bbc-news'}) =>
       _headlineRepository.getHeadLines(params);
 }
