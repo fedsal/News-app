@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app/core/resources/colors.dart';
@@ -17,9 +18,39 @@ class Headlines extends StatelessWidget {
       children: [
         _buildWelcome(),
         _buildSearchBar(),
+        _buildCategoriesSection(),
         _buildHeadlinesSection(),
       ],
     ));
+  }
+
+  Widget _buildCategoriesSection() {
+    const headlines = [
+      '#Health',
+      '#Music',
+      '#Technology',
+      '#Sports',
+      '#Science',
+      '#Entertainment',
+      '#Business'
+    ];
+    return Container(
+        margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+        height: 30,
+        child: ListView.separated(
+          separatorBuilder: (context, index) => const SizedBox(
+            width: 20,
+          ),
+          scrollDirection: Axis.horizontal,
+          itemCount: headlines.length,
+          itemBuilder: (context, index) => Text(
+            headlines[index],
+            style: const TextStyle(
+                color: CustomColors.grayTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w400),
+          ),
+        ));
   }
 
   Widget _buildSearchBar() => Container(
