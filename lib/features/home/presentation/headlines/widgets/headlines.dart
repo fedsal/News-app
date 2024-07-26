@@ -12,15 +12,14 @@ class Headlines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(
+    return Column(
       children: [
         _buildWelcome(),
         _buildSearchBar(),
         _buildCategoriesSection(),
         _buildHeadlinesSection(),
       ],
-    ));
+    );
   }
 
   Widget _buildCategoriesSection() {
@@ -153,24 +152,29 @@ class Headlines extends StatelessWidget {
         } else if (state is HeadlinesError) {
           return const Center(child: Icon(Icons.refresh));
         } else if (state is HeadlinesSuccess) {
-          return Container(
-              margin: const EdgeInsets.all(20),
-              height: 312,
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const SizedBox(
-                        width: 20,
-                      ),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.articles!.length,
-                  itemBuilder: (context, index) {
-                    return Article(
-                      title: state.articles![index].title,
-                      imageSrc: state.articles![index].urlToImage,
-                      author: state.articles![index].author,
-                      publishedDate: state.articles![index].publishedAt,
-                    );
-                  }));
+          return Expanded(
+              child: Container(
+                  margin: const EdgeInsets.only(right: 20, left: 20, top: 10),
+                  width: 360,
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) => const SizedBox(
+                            height: 20,
+                          ),
+                      scrollDirection: Axis.vertical,
+                      itemCount: state.articles!.length,
+                      itemBuilder: (context, index) {
+                        var padding =
+                            state.articles!.length - 1 == index ? 20 : 0;
+                        return Container(
+                            margin: EdgeInsets.only(bottom: padding.toDouble()),
+                            child: Article(
+                              title: state.articles![index].title,
+                              imageSrc: state.articles![index].urlToImage,
+                              author: state.articles![index].author,
+                              publishedDate: state.articles![index].publishedAt,
+                            ));
+                      })));
         } else {
           return const SizedBox();
         }

@@ -13,8 +13,8 @@ class Article extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-        width: 256,
-        height: 305,
+        width: 320,
+        height: 350,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -35,15 +35,14 @@ class Article extends StatelessWidget {
                     child: imageSrc != null && imageSrc!.isNotEmpty
                         ? Image.network(
                             imageSrc!,
-                            width: 231,
-                            height: 164,
+                            height: 205,
                             fit: BoxFit.cover,
                           )
                         : const Image(
                             image: AssetImage(
                                 'assets/images/news_placeholder.png'),
-                            width: 231,
-                            height: 164,
+                            width: 290,
+                            height: 205,
                           )),
                 const SizedBox(
                   height: 10,
