@@ -5,6 +5,8 @@ import 'package:news_app/features/home/data/data_sources/remote/headlines_api_se
 import 'package:news_app/features/home/data/repository/headline_repository_impl.dart';
 import 'package:news_app/features/home/domain/usecases/get_country_headlines.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
+import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
+import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
 import 'package:news_app/features/home/presentation/pages/home_page.dart';
 
 void main() {

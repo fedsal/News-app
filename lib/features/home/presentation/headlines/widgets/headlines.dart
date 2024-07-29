@@ -6,6 +6,7 @@ import 'package:news_app/core/resources/colors.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
 import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
+import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
 
 class Headlines extends StatelessWidget {
   const Headlines({super.key});
@@ -166,14 +167,26 @@ class Headlines extends StatelessWidget {
                       itemBuilder: (context, index) {
                         var padding =
                             state.articles!.length - 1 == index ? 20 : 0;
-                        return Container(
-                            margin: EdgeInsets.only(bottom: padding.toDouble()),
-                            child: Article(
-                              title: state.articles![index].title,
-                              imageSrc: state.articles![index].urlToImage,
-                              author: state.articles![index].author,
-                              publishedDate: state.articles![index].publishedAt,
-                            ));
+                        return GestureDetector(
+                            onTap: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ArticleDetailPage(
+                                                  article:
+                                                      state.articles![index])))
+                                },
+                            child: Container(
+                                margin:
+                                    EdgeInsets.only(bottom: padding.toDouble()),
+                                child: Article(
+                                  title: state.articles![index].title,
+                                  imageSrc: state.articles![index].urlToImage,
+                                  author: state.articles![index].author,
+                                  publishedDate:
+                                      state.articles![index].publishedAt,
+                                )));
                       })));
         } else {
           return const SizedBox();
