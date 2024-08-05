@@ -65,6 +65,7 @@ dependencies:
   dio: ^5.5.0+1
   iconsax: ^0.0.8
   flutter_svg: ^2.0.10+1
+  webview_flutter: ^4.8.0
 
 dev_dependencies:
   flutter_test:
