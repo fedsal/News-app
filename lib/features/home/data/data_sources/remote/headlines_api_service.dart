@@ -14,4 +14,8 @@ abstract class HeadlinesApiService {
     @Query("apiKey") String? apiKey,
     @Query("sources") String? sources,
   });
+
+  @GET("/top-headlines")
+  Future<HttpResponse<ArticleResponse>> getTopicHeadlines(
+      {@Query("apiKey") String? apikey, @Query("category") String? category});
 }

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app/core/resources/colors.dart';
+import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
+import 'package:news_app/features/home/presentation/headlines/bloc/headlines_event.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
 import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
 import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
@@ -17,39 +19,50 @@ class Headlines extends StatelessWidget {
       children: [
         _buildWelcome(),
         _buildSearchBar(),
-        _buildCategoriesSection(),
+        _buildCategoriesSection(context),
         _buildHeadlinesSection(),
       ],
     );
   }
 
-  Widget _buildCategoriesSection() {
-    const headlines = [
-      '#Health',
-      '#Music',
-      '#Technology',
-      '#Sports',
-      '#Science',
-      '#Entertainment',
-      '#Business'
-    ];
+  Widget _buildCategoriesSection(BuildContext context) {
+    const headlines = Topic.values;
     return Container(
-        margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
-        height: 30,
-        child: ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(
-            width: 20,
-          ),
-          scrollDirection: Axis.horizontal,
-          itemCount: headlines.length,
-          itemBuilder: (context, index) => Text(
-            headlines[index],
-            style: const TextStyle(
-                color: CustomColors.grayTextColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w400),
-          ),
-        ));
+      margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+      height: 30,
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(
+          width: 20,
+        ),
+        scrollDirection: Axis.horizontal,
+        itemCount: headlines.length,
+        itemBuilder: (context, index) {
+          final topic = headlines[index];
+          return GestureDetector(
+            onTap: () {
+              print('Tapped on ${topic.name}'); // Debugging line
+              context
+                  .read<HeadlinesBloc>()
+                  .add(GetTopicHeadlines(topic: topic));
+            },
+            child: Container(
+              color: Colors.amberAccent,
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10), // Add padding to ensure better tap area
+              alignment: Alignment.center, // Center text within container
+              child: Text(
+                topic.name,
+                style: const TextStyle(
+                  color: CustomColors.grayTextColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildSearchBar() => Container(

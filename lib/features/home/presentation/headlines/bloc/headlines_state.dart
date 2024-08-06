@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/domain/entities/article.dart';
 
 abstract class HeadlinesState extends Equatable {
@@ -8,7 +9,7 @@ abstract class HeadlinesState extends Equatable {
   const HeadlinesState({this.articles, this.error});
 
   @override
-  List<Object?> get props => [articles!, error!];
+  List<Object?> get props => [articles, error];
 }
 
 class HeadlinesLoading extends HeadlinesState {
@@ -17,6 +18,11 @@ class HeadlinesLoading extends HeadlinesState {
 
 class HeadlinesSuccess extends HeadlinesState {
   const HeadlinesSuccess(List<ArticleEntity> articles)
+      : super(articles: articles);
+}
+
+class TopicHeadlinesSuccess extends HeadlinesState {
+  const TopicHeadlinesSuccess(List<ArticleEntity> articles, Topic topic)
       : super(articles: articles);
 }
 
