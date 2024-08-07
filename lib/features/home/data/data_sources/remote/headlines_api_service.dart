@@ -9,13 +9,16 @@ part 'headlines_api_service.g.dart';
 abstract class HeadlinesApiService {
   factory HeadlinesApiService(Dio dio) = _HeadlinesApiService;
 
-  @GET("/top-headlines")
-  Future<HttpResponse<ArticleResponse>> getHeadlines({
-    @Query("apiKey") String? apiKey,
-    @Query("sources") String? sources,
-  });
+  @GET("/latest")
+  Future<HttpResponse<ArticleResponse>> getLatest(
+      {@Query("apiKey") String? apiKey,
+      @Query("country") String? country,
+      @Query("page") String? nextPage});
 
-  @GET("/top-headlines")
+  @GET("/latest")
   Future<HttpResponse<ArticleResponse>> getTopicHeadlines(
-      {@Query("apiKey") String? apikey, @Query("category") String? category});
+      {@Query("apiKey") String? apikey,
+      @Query("country") String? country,
+      @Query("category") String? category,
+      @Query("page") String? nextPage});
 }

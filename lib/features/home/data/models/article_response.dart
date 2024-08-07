@@ -4,20 +4,19 @@ class ArticleResponse {
   final String? status;
   final int? totalResults;
   final List<ArticleModel>? articles;
+  final String? nextPage;
 
-  const ArticleResponse({
-    this.status,
-    this.totalResults,
-    this.articles,
-  });
+  const ArticleResponse(
+      {this.status, this.totalResults, this.articles, this.nextPage});
 
   factory ArticleResponse.fromJson(Map<String, dynamic> map) {
-    List<dynamic> articlesList = map['articles'];
+    List<dynamic> articlesList = map['results'];
     List<ArticleModel> parsedArticles =
         articlesList.map((article) => ArticleModel.fromJson(article)).toList();
     return ArticleResponse(
         status: map['author'] ?? '',
         totalResults: map['totalResults'] ?? '',
-        articles: parsedArticles);
+        articles: parsedArticles,
+        nextPage: map['nextPage'] ?? '');
   }
 }

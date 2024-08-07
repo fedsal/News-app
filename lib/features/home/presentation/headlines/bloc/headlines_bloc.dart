@@ -23,7 +23,7 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
   }
 
   void onGetHeadlines(GetHeadlines event, Emitter<HeadlinesState> emit) async {
-    final dataState = await _getCountryHeadlinesUseCase();
+    final dataState = await _getCountryHeadlinesUseCase(params: 'ar');
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
       emit(HeadlinesSuccess(dataState.data!));
@@ -35,7 +35,9 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
   void onGetTopicHeadlines(
       GetTopicHeadlines event, Emitter<HeadlinesState> emit) async {
     emit(const HeadlinesLoading());
-    final dataState = await _getTopicHeadlinesUseCase(params: event.topic);
+    final dataState = await _getTopicHeadlinesUseCase(
+        params:
+            GetTopicHeadlinesUseCaseParams(country: 'ar', topic: event.topic));
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
       emit(HeadlinesSuccess(dataState.data!));

@@ -1,4 +1,3 @@
-import 'package:news_app/features/home/data/models/source.dart';
 import 'package:news_app/features/home/domain/entities/article.dart';
 
 class ArticleModel extends ArticleEntity {
@@ -14,13 +13,13 @@ class ArticleModel extends ArticleEntity {
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> map) => ArticleModel(
-      source: SourceModel.fromJson(map['source'] ?? ""),
-      author: map['author'] ?? '',
+      source: map['source_name'],
+      author: _parseCreator(map['creator']),
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      url: map['url'] ?? '',
-      urlToImage: map['urlToImage'] ?? '',
-      publishedAt: map['publishedAt'] ?? '',
+      url: map['link'] ?? '',
+      urlToImage: map['image_url'] ?? '',
+      publishedAt: map['pubDate'] ?? '',
       content: map['content'] ?? '');
 
   factory ArticleModel.fromEntity(ArticleEntity entity) => ArticleModel(
@@ -33,4 +32,13 @@ class ArticleModel extends ArticleEntity {
         publishedAt: entity.publishedAt,
         content: entity.content,
       );
+
+  static String _parseCreator(dynamic creator) {
+    if (creator is List) {
+      // Join the list items into a single string
+      return creator.map((item) => item.toString()).join(', ');
+    }
+    // Return an empty string if 'creator' is not a list
+    return '';
+  }
 }

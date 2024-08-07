@@ -13,7 +13,7 @@ class _HeadlinesApiService implements HeadlinesApiService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://newsapi.org/v2';
+    baseUrl ??= 'https://newsdata.io/api/1';
   }
 
   final Dio _dio;
@@ -21,14 +21,16 @@ class _HeadlinesApiService implements HeadlinesApiService {
   String? baseUrl;
 
   @override
-  Future<HttpResponse<ArticleResponse>> getHeadlines({
+  Future<HttpResponse<ArticleResponse>> getLatest({
     String? apiKey,
-    String? sources,
+    String? country,
+    String? nextPage,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'apiKey': apiKey,
-      r'sources': sources,
+      r'country': country,
+      r'page': nextPage,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -41,7 +43,7 @@ class _HeadlinesApiService implements HeadlinesApiService {
     )
             .compose(
               _dio.options,
-              '/top-headlines',
+              '/latest',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -58,12 +60,16 @@ class _HeadlinesApiService implements HeadlinesApiService {
   @override
   Future<HttpResponse<ArticleResponse>> getTopicHeadlines({
     String? apikey,
+    String? country,
     String? category,
+    String? nextPage,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'apiKey': apikey,
+      r'country': country,
       r'category': category,
+      r'page': nextPage,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
@@ -76,7 +82,7 @@ class _HeadlinesApiService implements HeadlinesApiService {
     )
             .compose(
               _dio.options,
-              '/top-headlines',
+              '/latest',
               queryParameters: queryParameters,
               data: _data,
             )

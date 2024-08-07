@@ -1,9 +1,19 @@
 enum Topic {
   business,
+  crime,
+  domestic,
+  education,
   entertainment,
-  general,
+  environment,
+  food,
   health,
+  lifestyle,
+  other,
+  politics,
   science,
   sports,
-  technology
+  technology,
+  top,
+  tourism,
+  world
 }

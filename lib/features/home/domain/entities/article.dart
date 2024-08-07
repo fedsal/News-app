@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:news_app/features/home/domain/entities/source.dart';
 
 class ArticleEntity extends Equatable {
-  final SourceEntity? source;
+  final String? source;
   final String? author;
   final String? title;
   final String? description;
