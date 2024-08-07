@@ -40,7 +40,7 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
             GetTopicHeadlinesUseCaseParams(country: 'ar', topic: event.topic));
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
-      emit(HeadlinesSuccess(dataState.data!));
+      emit(TopicHeadlinesSuccess(dataState.data!, event.topic));
     } else if (dataState is DataFailed) {
       emit(HeadlinesError(dataState.error!));
     }

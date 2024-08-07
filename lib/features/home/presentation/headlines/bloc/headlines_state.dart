@@ -22,7 +22,8 @@ class HeadlinesSuccess extends HeadlinesState {
 }
 
 class TopicHeadlinesSuccess extends HeadlinesState {
-  const TopicHeadlinesSuccess(List<ArticleEntity> articles, Topic topic)
+  final Topic topic;
+  const TopicHeadlinesSuccess(List<ArticleEntity> articles, this.topic)
       : super(articles: articles);
 }
 

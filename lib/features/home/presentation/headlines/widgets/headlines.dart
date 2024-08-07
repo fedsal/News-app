@@ -27,41 +27,40 @@ class Headlines extends StatelessWidget {
 
   Widget _buildCategoriesSection(BuildContext context) {
     const headlines = Topic.values;
-    return Container(
-      margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
-      height: 30,
-      child: ListView.separated(
-        separatorBuilder: (context, index) => const SizedBox(
-          width: 20,
-        ),
-        scrollDirection: Axis.horizontal,
-        itemCount: headlines.length,
-        itemBuilder: (context, index) {
-          final topic = headlines[index];
-          return GestureDetector(
-            onTap: () {
-              print('Tapped on ${topic.name}'); // Debugging line
-              context
-                  .read<HeadlinesBloc>()
-                  .add(GetTopicHeadlines(topic: topic));
+    return BlocBuilder<HeadlinesBloc, HeadlinesState>(
+      builder: (context, state) {
+        return Container(
+          margin: const EdgeInsets.only(top: 20, left: 25, right: 25),
+          height: 30,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: headlines.length,
+            itemBuilder: (context, index) {
+              final topic = headlines[index];
+              return GestureDetector(
+                  onTap: () {
+                    context
+                        .read<HeadlinesBloc>()
+                        .add(GetTopicHeadlines(topic: topic));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      '#${topic.name[0].toUpperCase()}${topic.name.substring(1)}',
+                      style: TextStyle(
+                        color: (state is TopicHeadlinesSuccess &&
+                                state.topic == headlines[index])
+                            ? CustomColors.buttonColor
+                            : CustomColors.grayTextColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ));
             },
-            child: Container(
-              color: Colors.amberAccent,
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10), // Add padding to ensure better tap area
-              alignment: Alignment.center, // Center text within container
-              child: Text(
-                topic.name,
-                style: const TextStyle(
-                  color: CustomColors.grayTextColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -165,7 +164,8 @@ class Headlines extends StatelessWidget {
           );
         } else if (state is HeadlinesError) {
           return const Center(child: Icon(Icons.refresh));
-        } else if (state is HeadlinesSuccess) {
+        } else if (state is HeadlinesSuccess ||
+            state is TopicHeadlinesSuccess) {
           return Expanded(
               child: Container(
                   margin: const EdgeInsets.only(right: 20, left: 20, top: 10),
