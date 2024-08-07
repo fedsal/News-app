@@ -7,4 +7,7 @@ abstract class HeadlineRepository {
 
   Future<DataState<List<ArticleEntity>>> getTopicHeadlines(
       String country, Topic topic);
+
+  Future<DataState<List<ArticleEntity>>> searchNews(
+      String country, String query);
 }

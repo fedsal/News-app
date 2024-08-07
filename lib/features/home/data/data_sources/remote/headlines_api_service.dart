@@ -10,15 +10,11 @@ abstract class HeadlinesApiService {
   factory HeadlinesApiService(Dio dio) = _HeadlinesApiService;
 
   @GET("/latest")
-  Future<HttpResponse<ArticleResponse>> getLatest(
-      {@Query("apiKey") String? apiKey,
-      @Query("country") String? country,
-      @Query("page") String? nextPage});
-
-  @GET("/latest")
-  Future<HttpResponse<ArticleResponse>> getTopicHeadlines(
-      {@Query("apiKey") String? apikey,
-      @Query("country") String? country,
-      @Query("category") String? category,
-      @Query("page") String? nextPage});
+  Future<HttpResponse<ArticleResponse>> getLatest({
+    @Query("apiKey") String? apiKey,
+    @Query("country") String? country,
+    @Query("page") String? nextPage,
+    @Query("category") String? category,
+    @Query("q") String? query,
+  });
 }

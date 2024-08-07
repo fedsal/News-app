@@ -17,10 +17,6 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
 
     add(const GetHeadlines());
   }
-  @override
-  void add(HeadlinesEvent event) {
-    super.add(event);
-  }
 
   void onGetHeadlines(GetHeadlines event, Emitter<HeadlinesState> emit) async {
     final dataState = await _getCountryHeadlinesUseCase(params: 'ar');
