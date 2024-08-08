@@ -5,6 +5,7 @@ import 'package:news_app/features/home/data/data_sources/remote/headlines_api_se
 import 'package:news_app/features/home/data/repository/headline_repository_impl.dart';
 import 'package:news_app/features/home/domain/usecases/get_country_headlines.dart';
 import 'package:news_app/features/home/domain/usecases/get_topic_headlines_use_case.dart';
+import 'package:news_app/features/home/domain/usecases/search_news_use_case.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
 import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
@@ -30,8 +31,10 @@ class MyApp extends StatelessWidget {
       home: BlocProvider(
         create: (BuildContext context) {
           var repository = HeadLineRepositoryImpl(HeadlinesApiService(Dio()));
-          return HeadlinesBloc(GetCountryHeadlinesUseCase(repository),
-              GetTopicHeadlinesUseCase(repository));
+          return HeadlinesBloc(
+              GetCountryHeadlinesUseCase(repository),
+              GetTopicHeadlinesUseCase(repository),
+              SearchNewsUseCase(repository));
         },
         child: const HomePage(),
       ),

@@ -15,6 +15,6 @@ abstract class HeadlinesApiService {
     @Query("country") String? country,
     @Query("page") String? nextPage,
     @Query("category") String? category,
-    @Query("q") String? query,
+    @Query("qInTitle") String? query,
   });
 }

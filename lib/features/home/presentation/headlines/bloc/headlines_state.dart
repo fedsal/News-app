@@ -27,6 +27,11 @@ class TopicHeadlinesSuccess extends HeadlinesState {
       : super(articles: articles);
 }
 
+class SearchNewsSuccess extends HeadlinesState {
+  const SearchNewsSuccess(List<ArticleEntity> articles)
+      : super(articles: articles);
+}
+
 class HeadlinesError extends HeadlinesState {
   const HeadlinesError(Exception error) : super(error: error);
 }

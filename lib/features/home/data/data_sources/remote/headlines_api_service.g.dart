@@ -34,7 +34,7 @@ class _HeadlinesApiService implements HeadlinesApiService {
       r'country': country,
       r'page': nextPage,
       r'category': category,
-      r'q': query,
+      r'qInTitle': query,
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};

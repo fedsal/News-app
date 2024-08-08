@@ -12,3 +12,8 @@ class GetTopicHeadlines extends HeadlinesEvent {
   final Topic topic;
   const GetTopicHeadlines({required this.topic});
 }
+
+class SearchNews extends HeadlinesEvent {
+  final String query;
+  const SearchNews({required this.query});
+}

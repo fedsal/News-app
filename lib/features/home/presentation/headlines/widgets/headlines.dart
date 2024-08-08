@@ -18,7 +18,7 @@ class Headlines extends StatelessWidget {
     return Column(
       children: [
         _buildWelcome(),
-        _buildSearchBar(),
+        _buildSearchBar(context),
         _buildCategoriesSection(context),
         _buildHeadlinesSection(),
       ],
@@ -64,63 +64,75 @@ class Headlines extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchBar() => Container(
-      margin: const EdgeInsets.only(top: 40.0, left: 20, right: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-      ),
-      child: SizedBox(
-        height: 55,
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search for article...",
-                          hintStyle: const TextStyle(
-                              color: CustomColors.grayTextColor),
-                          filled: true,
-                          fillColor: Colors.white,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide.none,
+  Widget _buildSearchBar(BuildContext context) {
+    String searchedText = '';
+    return Container(
+        margin: const EdgeInsets.only(top: 40.0, left: 20, right: 20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        child: SizedBox(
+          height: 55,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          onChanged: (value) {
+                            searchedText = value;
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Search for article...",
+                            hintStyle: const TextStyle(
+                                color: CustomColors.grayTextColor),
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    context
+                        .read<HeadlinesBloc>()
+                        .add(SearchNews(query: searchedText));
+                  },
+                  child: Container(
+                    width: 55, // Adjust width as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: CustomColors.buttonColor,
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: 55, // Adjust width as needed
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: CustomColors.buttonColor,
-              ),
-              child: Center(
-                child: SvgPicture.asset(
-                  'assets/images/search_icon.svg',
-                  semanticsLabel: 'Search Icon',
-                  width: 24,
-                  height: 24,
-                  colorFilter:
-                      const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ));
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/images/search_icon.svg',
+                        semanticsLabel: 'Search Icon',
+                        width: 24,
+                        height: 24,
+                        colorFilter: const ColorFilter.mode(
+                            Colors.white, BlendMode.srcIn),
+                      ),
+                    ),
+                  )),
+            ],
+          ),
+        ));
+  }
 
   Widget _buildWelcome() => const Padding(
       padding: EdgeInsets.only(top: 70, left: 30, right: 30),
@@ -165,7 +177,8 @@ class Headlines extends StatelessWidget {
         } else if (state is HeadlinesError) {
           return const Center(child: Icon(Icons.refresh));
         } else if (state is HeadlinesSuccess ||
-            state is TopicHeadlinesSuccess) {
+            state is TopicHeadlinesSuccess ||
+            state is SearchNewsSuccess) {
           return Expanded(
               child: Container(
                   margin: const EdgeInsets.only(right: 20, left: 20, top: 10),
