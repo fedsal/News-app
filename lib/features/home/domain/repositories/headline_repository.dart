@@ -10,4 +10,10 @@ abstract class HeadlineRepository {
 
   Future<DataState<List<ArticleEntity>>> searchNews(
       String country, String query);
+
+  Future<DataState<List<ArticleEntity>>> getSavedNews();
+
+  Future<void> saveArticle(ArticleEntity article);
+
+  Future<void> deleteArticle(ArticleEntity article);
 }

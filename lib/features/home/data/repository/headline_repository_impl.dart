@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'package:news_app/core/constants/constants.dart';
 import 'package:news_app/core/resources/data_state.dart';
+import 'package:news_app/features/home/data/data_sources/local/app_database.dart';
 import 'package:news_app/features/home/data/data_sources/remote/headlines_api_service.dart';
+import 'package:news_app/features/home/data/models/article.dart';
 import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/domain/entities/article.dart';
 import 'package:news_app/features/home/domain/repositories/headline_repository.dart';
+import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
 
 class HeadLineRepositoryImpl implements HeadlineRepository {
   final HeadlinesApiService _headlinesApiService;
+  final AppDatabase _appDatabase;
 
-  const HeadLineRepositoryImpl(this._headlinesApiService);
+  const HeadLineRepositoryImpl(this._headlinesApiService, this._appDatabase);
 
   @override
   Future<DataState<List<ArticleEntity>>> getLatest(String country) async {
@@ -68,5 +72,21 @@ class HeadLineRepositoryImpl implements HeadlineRepository {
       }
     }
     return newsList;
+  }
+
+  @override
+  Future<void> deleteArticle(ArticleEntity article) async {
+    _appDatabase.articlesDao.deleteArticle(ArticleModel.fromEntity(article));
+  }
+
+  @override
+  Future<DataState<List<ArticleEntity>>> getSavedNews() async {
+    var news = await _appDatabase.articlesDao.getSavedArticles();
+    return DataSuccess(news);
+  }
+
+  @override
+  Future<void> saveArticle(ArticleEntity article) async {
+    _appDatabase.articlesDao.insertArticle(ArticleModel.fromEntity(article));
   }
 }
