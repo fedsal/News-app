@@ -7,8 +7,6 @@ import 'package:news_app/features/home/domain/usecases/get_country_headlines.dar
 import 'package:news_app/features/home/domain/usecases/get_topic_headlines_use_case.dart';
 import 'package:news_app/features/home/domain/usecases/search_news_use_case.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
-import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
-import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
 import 'package:news_app/features/home/presentation/pages/home_page.dart';
 
 void main() {
