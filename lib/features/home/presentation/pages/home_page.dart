@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:news_app/features/home/presentation/headlines/widgets/headlines.dart';
+import 'package:news_app/features/home/presentation/saved_articles/widgets/saved_articles.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,7 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[Headlines(), Headlines()];
+  static const List<Widget> _pages = <Widget>[Headlines(), SavedArticles()];
 
   void _onItemTapped(int index) {
     setState(() {

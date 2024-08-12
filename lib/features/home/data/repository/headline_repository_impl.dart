@@ -7,7 +7,6 @@ import 'package:news_app/features/home/data/models/article.dart';
 import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/domain/entities/article.dart';
 import 'package:news_app/features/home/domain/repositories/headline_repository.dart';
-import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
 
 class HeadLineRepositoryImpl implements HeadlineRepository {
   final HeadlinesApiService _headlinesApiService;

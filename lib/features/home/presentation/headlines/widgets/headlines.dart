@@ -7,8 +7,7 @@ import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_event.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
-import 'package:news_app/features/home/presentation/headlines/widgets/article.dart';
-import 'package:news_app/features/home/presentation/pages/article_detail_page.dart';
+import 'package:news_app/features/home/presentation/widgets/article_list.dart';
 
 class Headlines extends StatelessWidget {
   const Headlines({super.key});
@@ -179,41 +178,7 @@ class Headlines extends StatelessWidget {
         } else if (state is HeadlinesSuccess ||
             state is TopicHeadlinesSuccess ||
             state is SearchNewsSuccess) {
-          return Expanded(
-              child: Container(
-                  margin: const EdgeInsets.only(right: 20, left: 20, top: 10),
-                  width: 360,
-                  child: ListView.separated(
-                      shrinkWrap: true,
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 20,
-                          ),
-                      scrollDirection: Axis.vertical,
-                      itemCount: state.articles!.length,
-                      itemBuilder: (context, index) {
-                        var padding =
-                            state.articles!.length - 1 == index ? 20 : 0;
-                        return GestureDetector(
-                            onTap: () => {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ArticleDetailPage(
-                                                  article:
-                                                      state.articles![index])))
-                                },
-                            child: Container(
-                                margin:
-                                    EdgeInsets.only(bottom: padding.toDouble()),
-                                child: Article(
-                                  title: state.articles![index].title,
-                                  imageSrc: state.articles![index].urlToImage,
-                                  author: state.articles![index].author,
-                                  publishedDate:
-                                      state.articles![index].publishedAt,
-                                )));
-                      })));
+          return ArticleList(articles: state.articles!);
         } else {
           return const SizedBox();
         }
