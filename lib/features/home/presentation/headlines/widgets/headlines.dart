@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:news_app/core/resources/colors.dart';
 import 'package:news_app/features/home/data/models/categories.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_event.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
+import 'package:news_app/features/home/presentation/pages/article_detail/saved_item_bloc.dart';
 import 'package:news_app/features/home/presentation/widgets/article_list.dart';
 
 class Headlines extends StatelessWidget {
@@ -178,6 +180,17 @@ class Headlines extends StatelessWidget {
         } else if (state is HeadlinesSuccess ||
             state is TopicHeadlinesSuccess ||
             state is SearchNewsSuccess) {
+          var bloc = BlocBuilder<SavedItemBloc, SavedArticleState>(
+              builder: (BuildContext context, SavedArticleState states) {
+            var icon = (states is ArticleSaved) ? Iconsax.save_24 : Iconsax.add;
+            return IconButton(
+                onPressed: () {
+                  context
+                      .read<SavedItemBloc>()
+                      .add(ToggleSavedArticle(state.articles![0]));
+                },
+                icon: Icon(icon));
+          });
           return ArticleList(articles: state.articles!);
         } else {
           return const SizedBox();

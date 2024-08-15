@@ -8,8 +8,10 @@ import 'package:news_app/features/home/domain/usecases/delete_saved_article_use_
 import 'package:news_app/features/home/domain/usecases/get_country_headlines.dart';
 import 'package:news_app/features/home/domain/usecases/get_saved_news_use_case.dart';
 import 'package:news_app/features/home/domain/usecases/get_topic_headlines_use_case.dart';
+import 'package:news_app/features/home/domain/usecases/save_article_use_case.dart';
 import 'package:news_app/features/home/domain/usecases/search_news_use_case.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
+import 'package:news_app/features/home/presentation/pages/article_detail/saved_item_bloc.dart';
 import 'package:news_app/features/home/presentation/pages/home_page.dart';
 import 'package:news_app/features/home/presentation/saved_articles/bloc/saved_articles_bloc.dart';
 
@@ -29,14 +31,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var repository =
         HeadLineRepositoryImpl(HeadlinesApiService(Dio()), appDatabase);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-          fontFamily: 'Gellix'),
-      home: MultiBlocProvider(
+    var getSavedNewsUseCase = GetSavedNewsUseCase(repository);
+    var deleteSavedArticleUseCase = DeleteSavedArticleUseCase(repository);
+    return MultiBlocProvider(
         providers: [
           BlocProvider<HeadlinesBloc>(
               create: (BuildContext context) => HeadlinesBloc(
@@ -45,11 +42,21 @@ class MyApp extends StatelessWidget {
                   SearchNewsUseCase(repository))),
           BlocProvider(
               create: (BuildContext context) => SavedArticlesBloc(
-                  GetSavedNewsUseCase(repository),
-                  DeleteSavedArticleUseCase(repository)))
+                  getSavedNewsUseCase, deleteSavedArticleUseCase)),
+          BlocProvider(
+              create: (BuildContext context) => SavedItemBloc(
+                  getSavedNewsUseCase,
+                  SaveArticleUseCase(repository),
+                  deleteSavedArticleUseCase))
         ],
-        child: const HomePage(),
-      ),
-    );
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+              fontFamily: 'Gellix'),
+          home: const HomePage(),
+        ));
   }
 }
