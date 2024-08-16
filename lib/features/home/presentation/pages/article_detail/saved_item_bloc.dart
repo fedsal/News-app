@@ -13,6 +13,10 @@ sealed class SavedArticleState {
   const SavedArticleState(this.article);
 }
 
+class CheckingSavedStatus extends SavedArticleState {
+  CheckingSavedStatus(super.article);
+}
+
 class ArticleSaved extends SavedArticleState {
   ArticleSaved(super.article);
 }
@@ -57,6 +61,7 @@ class SavedItemBloc extends Bloc<SaveArticleEvent, SavedArticleState> {
 
   void onPersistInStateHolder(
       PersistInStateHolder event, Emitter<SavedArticleState> emit) {
+    emit(CheckingSavedStatus(event.article));
     add(CheckSavedStatus(event.article));
   }
 
@@ -79,7 +84,7 @@ class SavedItemBloc extends Bloc<SaveArticleEvent, SavedArticleState> {
       CheckSavedStatus event, Emitter<SavedArticleState> emit) async {
     final dataState = await _getSavedNewsUseCase.call(params: null);
 
-    if (dataState is DataSuccess && dataState.data!.contains(state.article)) {
+    if (dataState is DataSuccess && dataState.data!.contains(event.article)) {
       emit(ArticleSaved(state.article));
     } else {
       emit(ArticleNotSaved(state.article));
