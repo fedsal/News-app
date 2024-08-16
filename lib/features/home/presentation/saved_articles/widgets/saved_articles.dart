@@ -22,7 +22,19 @@ class SavedArticles extends StatelessWidget {
         } else if (state is ArticlesError) {
           return const Center(child: Icon(Icons.refresh));
         } else if (state is ArticlesSuccess) {
-          return ArticleList(articles: state.articles!);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                  padding: EdgeInsets.only(top: 40),
+                  child: Text(
+                    'Saved articles',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  )),
+              ArticleList(articles: state.articles!)
+            ],
+          );
         } else if (state is ArticlesEmpty) {
           return const Center(
               child: Column(
