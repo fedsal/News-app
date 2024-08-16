@@ -37,6 +37,7 @@ class ArticleList extends StatelessWidget {
                           imageSrc: articles[index].urlToImage,
                           author: articles[index].author,
                           publishedDate: articles[index].publishedAt,
+                          url: articles[index].url,
                         )));
               })));
 }

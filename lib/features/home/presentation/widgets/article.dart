@@ -1,15 +1,26 @@
+import 'dart:ffi';
+
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app/core/resources/colors.dart';
+import 'dart:io' show Platform;
 
 class Article extends StatelessWidget {
   final String? imageSrc;
   final String? title;
   final String? author;
   final String? publishedDate;
+  final String? url;
 
   const Article(
-      {super.key, this.imageSrc, this.title, this.author, this.publishedDate});
+      {super.key,
+      this.imageSrc,
+      this.title,
+      this.author,
+      this.publishedDate,
+      this.url});
 
   @override
   Widget build(BuildContext context) => Container(
@@ -81,23 +92,40 @@ class Article extends StatelessWidget {
                           ],
                         ),
                         const Spacer(),
-                        Container(
-                          width: 37,
-                          height: 37,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: CustomColors.secondaryButtonColor),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'assets/images/send_icon.svg',
-                              semanticsLabel: 'Send Icon',
-                              width: 18,
-                              height: 18,
-                              colorFilter: const ColorFilter.mode(
-                                  CustomColors.buttonColor, BlendMode.srcIn),
-                            ),
-                          ),
-                        )
+                        GestureDetector(
+                            onTap: () {
+                              if (Platform.isAndroid) {
+                                var intent = AndroidIntent(
+                                  action: 'android.intent.action.SEND',
+                                  type: 'text/plain',
+                                  arguments: {
+                                    'android.intent.extra.TEXT': '$url'
+                                  },
+                                  flags: <int>[
+                                    Flag.FLAG_GRANT_READ_URI_PERMISSION
+                                  ],
+                                );
+                                intent.launchChooser('Sharing link');
+                              }
+                            },
+                            child: Container(
+                              width: 37,
+                              height: 37,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: CustomColors.secondaryButtonColor),
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  'assets/images/send_icon.svg',
+                                  semanticsLabel: 'Send Icon',
+                                  width: 18,
+                                  height: 18,
+                                  colorFilter: const ColorFilter.mode(
+                                      CustomColors.buttonColor,
+                                      BlendMode.srcIn),
+                                ),
+                              ),
+                            ))
                       ],
                     ))
               ],
