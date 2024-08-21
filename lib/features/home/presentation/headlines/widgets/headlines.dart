@@ -2,29 +2,111 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:news_app/core/resources/colors.dart';
 import 'package:news_app/features/home/data/models/categories.dart';
+import 'package:news_app/features/home/data/models/countries.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_bloc.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_event.dart';
 import 'package:news_app/features/home/presentation/headlines/bloc/headlines_state.dart';
-import 'package:news_app/features/home/presentation/pages/article_detail/saved_item_bloc.dart';
 import 'package:news_app/features/home/presentation/widgets/article_list.dart';
 
 class Headlines extends StatelessWidget {
   const Headlines({super.key});
 
+  void _showDialog(BuildContext context, Widget child) {
+    final result = showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+          color: CupertinoColors.systemBackground.resolveFrom(context),
+        ),
+        height: 400,
+        padding: const EdgeInsets.only(top: 6.0),
+        // The Bottom margin is provided to align the popup above the system navigation bar.
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        // Use a SafeArea widget to avoid system overlaps.
+        child: SafeArea(
+          top: false,
+          child: child,
+        ),
+      ),
+    );
+    result.then((_) {
+      context.read<HeadlinesBloc>().add(const GetHeadlines());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SafeArea(
+        child: Column(
       children: [
+        _buildCountrySelector(context),
         _buildWelcome(),
         _buildSearchBar(context),
         _buildCategoriesSection(context),
         _buildHeadlinesSection(),
       ],
-    );
+    ));
   }
+
+  Widget _buildCountrySelector(BuildContext context) => Padding(
+      padding: const EdgeInsets.only(top: 18, right: 20),
+      child: GestureDetector(
+          onTap: () {
+            const countries = Country.values;
+            _showDialog(
+                context,
+                CupertinoPicker(
+                  magnification: 1.22,
+                  squeeze: 1.2,
+                  useMagnifier: true,
+                  itemExtent: 32,
+                  // This sets the initial item.
+                  scrollController: FixedExtentScrollController(
+                    initialItem: 0,
+                  ),
+                  // This is called when selected item is changed.
+                  onSelectedItemChanged: (int selectedItem) {
+                    context
+                        .read<HeadlinesBloc>()
+                        .add(SelectCountry(country: countries[selectedItem]));
+                  },
+                  children:
+                      List<Widget>.generate(countries.length, (int index) {
+                    return Center(child: Text(countries[index].name));
+                  }),
+                ));
+          },
+          child: BlocBuilder<HeadlinesBloc, HeadlinesState>(
+              builder: (context, state) => Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        state.country.code.toUpperCase(),
+                        style: const TextStyle(
+                            color: CustomColors.buttonColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 4),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: CustomColors.buttonColor,
+                        ),
+                      ),
+                    ],
+                  ))));
 
   Widget _buildCategoriesSection(BuildContext context) {
     const headlines = Topic.values;
@@ -49,7 +131,7 @@ class Headlines extends StatelessWidget {
                     child: Text(
                       '#${topic.name[0].toUpperCase()}${topic.name.substring(1)}',
                       style: TextStyle(
-                        color: (state is TopicHeadlinesSuccess &&
+                        color: (state.topic != null &&
                                 state.topic == headlines[index])
                             ? CustomColors.buttonColor
                             : CustomColors.grayTextColor,
@@ -136,7 +218,7 @@ class Headlines extends StatelessWidget {
   }
 
   Widget _buildWelcome() => const Padding(
-      padding: EdgeInsets.only(top: 70, left: 30, right: 30),
+      padding: EdgeInsets.only(left: 30, right: 30),
       child: Row(
         children: [
           Image(
@@ -171,26 +253,13 @@ class Headlines extends StatelessWidget {
   Widget _buildHeadlinesSection() {
     return BlocBuilder<HeadlinesBloc, HeadlinesState>(
       builder: (BuildContext context, HeadlinesState state) {
-        if (state is HeadlinesLoading) {
+        if (state.isLoading) {
           return const Center(
             child: CupertinoActivityIndicator(),
           );
-        } else if (state is HeadlinesError) {
+        } else if (state.error != null) {
           return const Center(child: Icon(Icons.refresh));
-        } else if (state is HeadlinesSuccess ||
-            state is TopicHeadlinesSuccess ||
-            state is SearchNewsSuccess) {
-          var bloc = BlocBuilder<SavedItemBloc, SavedArticleState>(
-              builder: (BuildContext context, SavedArticleState states) {
-            var icon = (states is ArticleSaved) ? Iconsax.save_24 : Iconsax.add;
-            return IconButton(
-                onPressed: () {
-                  context
-                      .read<SavedItemBloc>()
-                      .add(ToggleSavedArticle(state.articles![0]));
-                },
-                icon: Icon(icon));
-          });
+        } else if (state.articles.isNotEmpty) {
           return ArticleList(articles: state.articles!);
         } else {
           return const SizedBox();

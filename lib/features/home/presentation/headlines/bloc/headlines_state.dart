@@ -1,37 +1,36 @@
 import 'package:equatable/equatable.dart';
 import 'package:news_app/features/home/data/models/categories.dart';
+import 'package:news_app/features/home/data/models/countries.dart';
 import 'package:news_app/features/home/domain/entities/article.dart';
 
-abstract class HeadlinesState extends Equatable {
-  final List<ArticleEntity>? articles;
+class HeadlinesState extends Equatable {
+  final List<ArticleEntity> articles;
   final Exception? error;
+  final Country country;
+  final bool isLoading;
+  final Topic? topic;
 
-  const HeadlinesState({this.articles, this.error});
+  const HeadlinesState(
+      {this.isLoading = false,
+      this.country = Country.unitedStatesOfAmerica,
+      this.articles = const [],
+      this.topic,
+      this.error});
+
+  HeadlinesState copyWith(
+      {bool? isLoading,
+      Country? country,
+      List<ArticleEntity>? articles,
+      Topic? topic,
+      Exception? error}) {
+    return HeadlinesState(
+        isLoading: isLoading ?? this.isLoading,
+        country: country ?? this.country,
+        articles: articles ?? this.articles,
+        topic: topic,
+        error: error);
+  }
 
   @override
-  List<Object?> get props => [articles, error];
-}
-
-class HeadlinesLoading extends HeadlinesState {
-  const HeadlinesLoading();
-}
-
-class HeadlinesSuccess extends HeadlinesState {
-  const HeadlinesSuccess(List<ArticleEntity> articles)
-      : super(articles: articles);
-}
-
-class TopicHeadlinesSuccess extends HeadlinesState {
-  final Topic topic;
-  const TopicHeadlinesSuccess(List<ArticleEntity> articles, this.topic)
-      : super(articles: articles);
-}
-
-class SearchNewsSuccess extends HeadlinesState {
-  const SearchNewsSuccess(List<ArticleEntity> articles)
-      : super(articles: articles);
-}
-
-class HeadlinesError extends HeadlinesState {
-  const HeadlinesError(Exception error) : super(error: error);
+  List<Object?> get props => [isLoading, country, articles, topic, error];
 }

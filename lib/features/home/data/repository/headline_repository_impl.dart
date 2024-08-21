@@ -66,6 +66,9 @@ class HeadLineRepositoryImpl implements HeadlineRepository {
             .toList();
         newsList.addAll(imageFilteredNews);
         nextPage = httpResponse.data.nextPage;
+        if (nextPage == null || nextPage.isEmpty) {
+          break;
+        }
       } else {
         throw Exception();
       }

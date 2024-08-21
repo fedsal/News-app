@@ -13,35 +13,50 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
 
   HeadlinesBloc(this._getCountryHeadlinesUseCase,
       this._getTopicHeadlinesUseCase, this._searchNewsUseCase)
-      : super(const HeadlinesLoading()) {
+      : super(const HeadlinesState(isLoading: true)) {
     on<GetHeadlines>(onGetHeadlines);
     on<GetTopicHeadlines>(onGetTopicHeadlines);
     on<SearchNews>(onSearchNews);
+    on<SelectCountry>(onSelectCountry);
 
     add(const GetHeadlines());
   }
 
+  onSelectCountry(SelectCountry event, Emitter<HeadlinesState> emit) {
+    emit(state.copyWith(country: event.country));
+  }
+
   void onGetHeadlines(GetHeadlines event, Emitter<HeadlinesState> emit) async {
-    final dataState = await _getCountryHeadlinesUseCase(params: 'ar');
+    emit(state.copyWith(isLoading: true));
+    final dataState =
+        await _getCountryHeadlinesUseCase(params: state.country.code);
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
-      emit(HeadlinesSuccess(dataState.data!));
+      emit(state.copyWith(
+          isLoading: false,
+          articles: dataState.data!,
+          topic: null,
+          error: null));
     } else if (dataState is DataFailed) {
-      emit(HeadlinesError(dataState.error!));
+      emit(state.copyWith(isLoading: false, error: dataState.error!));
     }
   }
 
   void onGetTopicHeadlines(
       GetTopicHeadlines event, Emitter<HeadlinesState> emit) async {
-    emit(const HeadlinesLoading());
+    emit(state.copyWith(isLoading: true));
     final dataState = await _getTopicHeadlinesUseCase(
-        params:
-            GetTopicHeadlinesUseCaseParams(country: 'ar', topic: event.topic));
+        params: GetTopicHeadlinesUseCaseParams(
+            country: state.country.code, topic: event.topic));
 
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
-      emit(TopicHeadlinesSuccess(dataState.data!, event.topic));
+      emit(state.copyWith(
+          isLoading: false,
+          articles: dataState.data!,
+          topic: event.topic,
+          error: null));
     } else if (dataState is DataFailed) {
-      emit(HeadlinesError(dataState.error!));
+      emit(state.copyWith(isLoading: false, error: dataState.error!));
     }
   }
 
@@ -50,13 +65,15 @@ class HeadlinesBloc extends Bloc<HeadlinesEvent, HeadlinesState> {
       // TODO: show toast
       return;
     }
-    emit(const HeadlinesLoading());
+    emit(state.copyWith(isLoading: true, topic: null));
     final dataState = await _searchNewsUseCase(
-        params: SearchNewsUseCaseParams(country: 'ar', query: event.query));
+        params: SearchNewsUseCaseParams(
+            country: state.country.code, query: event.query));
     if (dataState is DataSuccess && dataState.data!.isNotEmpty) {
-      emit(SearchNewsSuccess(dataState.data!));
+      emit(state.copyWith(
+          isLoading: false, articles: dataState.data!, error: null));
     } else if (dataState is DataFailed) {
-      emit(HeadlinesError(dataState.error!));
+      emit(state.copyWith(isLoading: false, error: dataState.error!));
     }
   }
 }
