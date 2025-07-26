@@ -1,4 +1,5 @@
 # News App
+<img width="1400" height="1000" alt="Mockup 22" src="https://github.com/user-attachments/assets/e98b810e-ef5e-43c7-b2a7-e9eadd885beb" />
 
 News client build using Flutter, Dart and BLoC
 
